@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem name="Budgets"  
+    parent="account.menu_finance" 
+    id="Budgets_list_menu" 
+    sequence="33" 
+    groups ="base.group_user"/>
+
+     <menuitem name="Budgets"  
+    parent="Budgets_list_menu" 
+    id="Budgets_sub_menu" 
+    sequence="1" 
+    action="act_crossovered_budget_view"
+    groups ="base.group_user"/>
+
+    <menuitem name="ligne de budgets"
+    parent="Budgets_list_menu"
+    id="budgets_lines_view"
+    action="act_crossovered_budget_lines_view" sequence="2"
+    groups="base.group_user"/>
+
+    <menuitem name="Poste budgétaires"
+    parent="Budgets_list_menu"
+    id="poste_budget_view"
+    action="open_budget_post_form" sequence="3"
+    groups="base.group_user"/>
+
+
+    <record id="view_budget_inherit" model="ir.ui.view">
+                <field name="name">budget.form.inherit</field>
+                <field name="model">crossovered.budget</field>
+                <field name="inherit_id" ref="om_account_budget.crossovered_budget_view_form"/>
+                <field name="arch" type="xml">
+                        <xpath expr="//field[@name='user_id']" position="after">
+                                <field name="type_budget"/> 
+                        </xpath>
+                         <xpath expr="//field[@name='type_budget']" position="after">
+                                <field name="budget_total"/> 
+                                <field name="engagement_total"/>
+                                <field name="credit_available" invisible="1"/>
+                        </xpath>
+                         <xpath expr="//field[@name='planned_amount']" position="replace">
+                                <field name="planned_amount" string="crédit inscrit" sum="Planned Amount"/> 
+                        </xpath>
+                         <xpath expr="//field[@name='practical_amount']" position="attributes">
+                               <attribute name="invisible">1</attribute>
+                        </xpath>
+                        <xpath expr="//field[@name='theoritical_amount']" position="attributes">
+                               <attribute name="invisible">1</attribute>
+                        </xpath>
+                        <xpath expr="//field[@name='percentage']" position="attributes">
+                               <attribute name="invisible">1</attribute>
+                        </xpath>
+                        <xpath expr="//field[@name='planned_amount']" position="after">
+                              <field name="engagement_id"/> 
+                              <field name="engagement_som" sum="Engagement Amount"/>
+                              <field name="engagement_total_id" invisible="1"/>
+                              <field name="credit_available_id"/>
+                        </xpath>
+            
+                         
+                </field>
+            </record>
+
+       <record id="view_engagement_inherit" model="ir.ui.view">
+                <field name="name">engagement.form.inherit</field>
+                <field name="model">market.execution</field>
+                <field name="inherit_id" ref="wt_purchase_request_extend.view_market_execution_form"/>
+                <field name="arch" type="xml">
+                        
+                            <xpath expr="//field[@name='budget_id']" position="attributes">
+                                   <attribute name="invisible">1</attribute>
+                            </xpath>
+                            <xpath expr="//label[@for='budget_id']" position="attributes">
+                                   <attribute name="invisible">1</attribute>
+                            </xpath>
+                            <xpath expr="//field[@name='final_deposit']" position="after">
+                                <field name="budget_ids"/> 
+                            </xpath>
+                            <!-- <xpath expr="//field[@name='budget_ids']" position="after">
+                                <field name="bdg_lines"/> 
+                            </xpath> -->
+                       
+                         
+                </field>
+            </record>
+</odoo>
